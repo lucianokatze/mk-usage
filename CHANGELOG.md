@@ -6,6 +6,8 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-12
+
 ### Added
 
 - El estado de git y GitHub en una fila sobre el prompt, con los colores del tema según el estado:
@@ -49,5 +51,6 @@ Primera versión publicada. Las 0.1 y 0.2 fueron internas: lo que traían está 
 - La zona horaria y la cuenta se vuelven a leer cada hora.
 - Cuando falta espacio, los bloques se recortan por partes, y el aviso de una ventana que se agota es lo último que se pierde.
 
-[Unreleased]: https://github.com/lucianokatze/mk-usage/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/lucianokatze/mk-usage/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/lucianokatze/mk-usage/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/lucianokatze/mk-usage/releases/tag/v0.3.0

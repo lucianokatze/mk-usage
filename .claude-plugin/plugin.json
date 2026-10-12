@@ -1,7 +1,7 @@
 {
   "name": "mk-usage",
   "displayName": "mk-usage",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Límites del plan de Claude (sesión 5h, semana, renovación) bajo el prompt, con estimación al reinicio; y el estado de git y GitHub (rama, cambios, sincronía, CI, versión) sobre el prompt, con commit asistido. Configurable. Sin filas extra en el pie ni tokens.",
   "author": {
     "name": "Luciano (markcodigital)"

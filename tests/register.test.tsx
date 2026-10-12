@@ -67,7 +67,12 @@ async function start(
   mock.store(on, entries)
   mock.env(on, { HOME: '/home/test', LANG: 'es_AR.UTF-8', ...env })
   on('fs.read', ($, e) => (e.path === '/home/test/.claude.json' ? { value: account } : { deny: `no file ${e.path}` }))
-  on('process.run', () => ({ value: { exitCode: 0, stdout: '-0300\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }))
+  // `date` for the zone; git answers as outside a repository, so only the quota draws here.
+  on('process.run', ($, e) =>
+    e.argv[0] === 'date'
+      ? { value: { exitCode: 0, stdout: '-0300\n', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
+      : { value: { exitCode: 128, stdout: '', stderr: 'not a git repository', isStdoutTruncated: false, isStderrTruncated: false } },
+  )
   on('session.usage', () => ({ value: { startedAt: NOW, context: { window: 200_000 }, rateLimits: [] } }))
   on('command.register', () => ({ value: { command: 'mk-usage' } }))
   on('ui.toast', () => ({ value: undefined }))

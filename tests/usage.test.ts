@@ -299,11 +299,13 @@ describe('layouts', () => {
     expect(lineOf(fitLine(view(), 70))).toBe('Sesión 5h  52% · ~93% al reinicio  │  Semana  23% · ~50% al reinicio')
   })
 
-  test('narrower still: short estimates without the renewal, then the named percentages', () => {
+  test('narrower still: short estimates without the renewal, the named percentages, the first window, nothing', () => {
     expect(lineOf(fitLine(view(), 50))).toBe('Sesión 5h  52% (~93%)  │  Semana  23% (~50%)')
     expect(lineOf(fitLine(view(), 38))).toBe('Sesión 5h  52% (~93%)  │  Semana  23%')
     expect(lineOf(fitLine(view(), 30))).toBe('Sesión 5h  52%  │  Semana  23%')
-    expect(lineOf(fitLine(view(), 5))).toBe('Sesión 5h  52%  │  Semana  23%')
+    // Never a row wider than its room, which the engine would cut with `…`.
+    expect(lineOf(fitLine(view(), 20))).toBe('Sesión 5h  52%')
+    expect(lineOf(fitLine(view(), 5))).toBe('')
   })
 
   test('a window running out keeps its warning after the renewal and the fine estimates are gone', () => {

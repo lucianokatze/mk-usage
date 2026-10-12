@@ -6,6 +6,33 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-12
+
+### Added
+
+- El estado de git y GitHub en una fila sobre el prompt, con los colores del tema según el estado:
+  - la rama;
+  - los cambios (preparados, modificados, nuevos, en conflicto, stash, una operación a medias);
+  - la sincronía con el remoto;
+  - el CI del PR o de la rama;
+  - la versión: último tag, commits sin publicar, versión pendiente y aviso de `CHANGELOG sin tocar`.
+
+  Se relee después de cada herramienta que toca archivos, al final de cada turno y cada `git_refresh_seconds`. GitHub se consulta con `gh`.
+- Un diálogo de commit (`/mk-usage commit`, o la tecla `c` en la franja):
+  - un borrador en Conventional Commits armado sin tokens;
+  - el botón opcional «Generar con Claude», que gasta tokens solo al apretarlo;
+  - el commit directo, o por la herramienta Bash con los hooks del repositorio.
+- `/mk-usage git pie|franja|oculto` para mover la fila de git, y `/mk-usage actualizar` para releer git y GitHub al momento.
+- Las opciones `git_placement`, `git_refresh_seconds`, `git_github`, `git_github_minutes`, `git_changelog_file`, `git_tag_pattern`, `git_commit_style`, `git_commit_ai`, `git_commit_model` y `git_commit_via`.
+- El detalle de `/mk-usage` suma git y GitHub: upstream, archivos, último commit, versión, PR, cada check que falla o corre, y la URL del PR.
+
+### Fixed
+
+- El texto del pie ya no se corta con `…`:
+  - cuando Claude Code muestra su badge `PR #N`, ahora se cuenta su espacio;
+  - cuando no entra ni la forma más corta, se muestran menos ventanas, o ninguna.
+- El texto del pie se suma al que agregan otros mods, en vez de reemplazarlo.
+
 ## [0.3.0] - 2026-10-12
 
 Primera versión publicada. Las 0.1 y 0.2 fueron internas: lo que traían está acá.
@@ -24,5 +51,6 @@ Primera versión publicada. Las 0.1 y 0.2 fueron internas: lo que traían está 
 - La zona horaria y la cuenta se vuelven a leer cada hora.
 - Cuando falta espacio, los bloques se recortan por partes, y el aviso de una ventana que se agota es lo último que se pierde.
 
-[Unreleased]: https://github.com/lucianokatze/mk-usage/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/lucianokatze/mk-usage/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/lucianokatze/mk-usage/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/lucianokatze/mk-usage/releases/tag/v0.3.0

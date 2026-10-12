@@ -1,5 +1,9 @@
 # mk-usage
 
+[![CI](https://github.com/lucianokatze/mk-usage/actions/workflows/ci.yml/badge.svg)](https://github.com/lucianokatze/mk-usage/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/lucianokatze/mk-usage)](https://github.com/lucianokatze/mk-usage/releases)
+[![Licencia MIT](https://img.shields.io/github/license/lucianokatze/mk-usage)](./LICENSE)
+
 Un mod de [Claude Code](https://code.claude.com/docs/es/plugins/mods/overview) que muestra, al final de la línea que está debajo del prompt, los límites de tu plan de Claude:
 - cuánto usaste de cada uno;
 - con cuánto vas a llegar al reinicio si seguís al ritmo actual;
@@ -123,7 +127,11 @@ mk-usage/
 │   ├── usage.ts           lógica pura: estimación, renovación, preferencias, armado de la línea
 │   └── words.ts           todos los textos, por idioma
 ├── types/index.d.ts       el contrato de $.state del mod
-└── tests/                 claude plugin test
+├── tests/                 claude plugin test
+├── scripts/
+│   └── release-notes.sh   imprime las notas de una versión desde el CHANGELOG
+└── .github/workflows/
+    └── ci.yml             valida, prueba y publica las versiones
 ```
 
 ```bash
@@ -134,6 +142,18 @@ claude plugin test .       # tests/*.test.ts(x)
 Para chequear los tipos se usa el archivo `claude-code.d.ts` de tu versión. Claude Code lo escribe en `.claude-plugin/types/` al cargar el mod desde una carpeta que recarga en caliente, o junto al skill `plugin-authoring` cuando se carga. Con ese archivo: `tsc -p .`, o un `tsconfig.json` cuyo `include` lo nombre junto a `hooks`, `types` y `tests`.
 
 **Para agregar un idioma:** sumá una tabla en `hooks/words.ts`, su código en `Language` y su detección en `languageOf`, y la opción en `language` dentro de `plugin.json`.
+
+## Versiones
+
+Cada versión está en [CHANGELOG.md](./CHANGELOG.md) y en las [releases](https://github.com/lucianokatze/mk-usage/releases). El proyecto usa [Versionado Semántico](https://semver.org/lang/es/): mientras sea 0.x, la versión menor sube con funciones nuevas y la de parche con arreglos.
+
+**Para publicar una versión:**
+
+1. Los cambios entran por un PR a `master`, con commits en el formato de [Conventional Commits](https://www.conventionalcommits.org/es/v1.0.0/) (`feat: …`, `fix: …`, `docs: …`), y cada uno suma su línea en `## [Unreleased]` del CHANGELOG.
+2. Al cerrar una versión, un commit `chore(release): vX.Y.Z` sube `version` en `.claude-plugin/plugin.json` y cambia `## [Unreleased]` por `## [X.Y.Z] - AAAA-MM-DD`, con su enlace al pie.
+3. El CI ([`ci.yml`](./.github/workflows/ci.yml)) valida el mod y corre los tests en cada PR y en cada push a `master`, y frena una versión sin notas en el CHANGELOG. Cuando `master` recibe una versión que todavía no tiene release, la publica: crea el tag `vX.Y.Z` con las notas de esa sección (`scripts/release-notes.sh X.Y.Z` las muestra).
+
+Claude Code solo les baja una copia nueva a quienes lo instalaron cuando cambia `version`: los cambios sin versión nueva quedan en el repositorio hasta la próxima.
 
 ## Licencia
 

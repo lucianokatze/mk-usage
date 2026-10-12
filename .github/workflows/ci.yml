@@ -1,0 +1,67 @@
+# Validates the mod and runs its tests on every pull request and every push to master,
+# and checks that the version in plugin.json has its notes in CHANGELOG.md. A push to
+# master whose version has no release yet publishes it: GitHub creates the tag vX.Y.Z
+# with the release, and the notes are that version's section of the CHANGELOG.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    name: Validar y probar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Instalar Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash -s latest
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Validar el mod
+        run: claude plugin validate .
+
+      - name: Correr los tests
+        run: claude plugin test .
+
+      - name: Notas de la versión en el CHANGELOG
+        run: scripts/release-notes.sh "$(jq -r .version .claude-plugin/plugin.json)" > /dev/null
+
+  release:
+    name: Publicar la versión
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Crear la release si la versión es nueva
+        run: |
+          version=$(jq -r .version .claude-plugin/plugin.json)
+          tag="v$version"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
+            echo "$tag ya está publicada."
+            exit 0
+          fi
+          scripts/release-notes.sh "$version" > "$RUNNER_TEMP/notes.md"
+          prerelease=
+          case "$version" in *-*) prerelease=--prerelease ;; esac
+          gh release create "$tag" --target "$GITHUB_SHA" --title "$tag" --notes-file "$RUNNER_TEMP/notes.md" $prerelease

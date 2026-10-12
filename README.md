@@ -30,10 +30,12 @@ Necesitás Claude Code v2.1.287 o posterior, que trae los mods activados por def
 **Desde GitHub**, en una sesión de Claude Code:
 
 ```
-/plugin install mk-usage --marketplace <usuario>/mk-usage
+/plugin install mk-usage --marketplace lucianokatze/mk-usage
 ```
 
 Respondé `y` para agregar el marketplace y elegí el alcance (`user`, para todas tus sesiones). Después configurá la fecha de renovación (ver [Configuración](#configuración)).
+
+**Para actualizarlo:** `/plugin marketplace update mk-usage` dentro de una sesión, o `claude plugin update mk-usage@mk-usage` desde la terminal. Para que se actualice solo, entrá a **Marketplaces** en `/plugin`, elegí `mk-usage` y activá **Enable auto-update**. Cada versión nueva cambia `version` en `plugin.json`: Claude Code solo baja una copia nueva cuando ese número cambia.
 
 **Desde una copia local** (por ejemplo, para desarrollarlo):
 

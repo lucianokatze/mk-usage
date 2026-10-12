@@ -486,7 +486,11 @@ export function rateLabel(ratePerHour: number, kind: string, words: Words = DEFA
 // Claude's own footer. Only words, digits, `~`, `·` and `│`: arrows such as
 // ↻ and → draw over the next cell in some fonts.
 
-export type Tone = 'text' | 'muted' | 'ok' | 'warn' | 'bad'
+/**
+ * `info` marks what is under way (a CI run, a release CI will publish) and
+ * `merged` a merged pull request; the quota uses the other five.
+ */
+export type Tone = 'text' | 'muted' | 'ok' | 'warn' | 'bad' | 'info' | 'merged'
 export type Segment = { text: string; tone: Tone; isBold?: boolean }
 export type Row = Segment[]
 export type Status = 'ok' | 'warn' | 'bad'
@@ -705,7 +709,15 @@ export function fitLine(view: View, width: number, style: Style = 'band'): Row {
     'bare',
   ] as const
   const variants = details.map(detail => line(view, windows, detail, style))
-  return variants.find(row => textOf(row).length <= width) ?? variants[variants.length - 1] ?? []
+  const found = variants.find(row => textOf(row).length <= width)
+  if (found !== undefined) return found
+  // Narrower still: the first windows alone (the session's comes first), or nothing,
+  // rather than a row the engine would cut with `…`.
+  for (let count = windows.length - 1; count > 0; count--) {
+    const row = line(view, windows.slice(0, count), 'bare', style)
+    if (textOf(row).length <= width) return row
+  }
+  return []
 }
 
 /** The detail `/mk-usage` shows: a header, then two rows per window. */

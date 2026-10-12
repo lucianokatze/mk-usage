@@ -2,7 +2,7 @@
   "name": "mk-usage",
   "displayName": "mk-usage",
   "version": "0.3.0",
-  "description": "Límites del plan de Claude (sesión 5h, semana) y renovación al final de la línea bajo el prompt, con estimación al reinicio. Configurable: idioma, ubicación, umbrales, facturación. Sin filas extra ni tokens.",
+  "description": "Límites del plan de Claude (sesión 5h, semana, renovación) bajo el prompt, con estimación al reinicio; y el estado de git y GitHub (rama, cambios, sincronía, CI, versión) sobre el prompt, con commit asistido. Configurable. Sin filas extra en el pie ni tokens.",
   "author": {
     "name": "Luciano (markcodigital)"
   },
@@ -11,6 +11,9 @@
     "usage",
     "rate-limits",
     "quota",
+    "git",
+    "github",
+    "commit",
     "mod"
   ],
   "types": "./types/index.d.ts",
@@ -83,6 +86,88 @@
       "min": 1,
       "max": 100,
       "default": 95
+    },
+    "git_placement": {
+      "type": "string",
+      "title": "Git: ubicación (git placement)",
+      "description": "Dónde se ve el estado de git y GitHub: band, una fila propia sobre el prompt con colores según el estado; footer, al final de la línea bajo el prompt (en gris); hidden, solo en el detalle de /mk-usage. /mk-usage git <ubicación> lo cambia al momento.",
+      "options": [
+        "band",
+        "footer",
+        "hidden"
+      ],
+      "default": "band"
+    },
+    "git_refresh_seconds": {
+      "type": "number",
+      "title": "Git: cada cuánto se relee (segundos)",
+      "description": "Además de releerse después de cada herramienta que toca archivos y al final de cada turno. En repositorios muy grandes se espacia solo.",
+      "min": 5,
+      "max": 600,
+      "default": 20
+    },
+    "git_github": {
+      "type": "string",
+      "title": "GitHub: PR y CI (git github)",
+      "description": "auto consulta el PR de la rama y sus checks con gh (hace falta gh instalado y con sesión); off no consulta GitHub.",
+      "options": [
+        "auto",
+        "off"
+      ],
+      "default": "auto"
+    },
+    "git_github_minutes": {
+      "type": "number",
+      "title": "GitHub: cada cuánto se consulta (minutos)",
+      "description": "Mientras hay checks corriendo se consulta cada 30 segundos, y después de un push enseguida.",
+      "min": 1,
+      "max": 60,
+      "default": 3
+    },
+    "git_changelog_file": {
+      "type": "string",
+      "title": "Git: archivo de cambios (changelog)",
+      "description": "El archivo que avisa «sin tocar» cuando hay commits sin publicar desde el último tag y no cambió. Vacío desactiva el aviso.",
+      "default": "CHANGELOG.md"
+    },
+    "git_tag_pattern": {
+      "type": "string",
+      "title": "Git: patrón de los tags de versión",
+      "description": "Qué tags cuentan como versiones publicadas (git describe --match).",
+      "default": "v[0-9]*"
+    },
+    "git_commit_style": {
+      "type": "string",
+      "title": "Commit: estilo del mensaje",
+      "description": "conventional (feat:, fix:, docs:…, Conventional Commits 1.0.0) o plain (una frase).",
+      "options": [
+        "conventional",
+        "plain"
+      ],
+      "default": "conventional"
+    },
+    "git_commit_ai": {
+      "type": "boolean",
+      "title": "Commit: botón «Generar con Claude»",
+      "description": "Muestra el botón que le pide a Claude el mensaje a partir del diff preparado. Gasta tokens solo cuando lo apretás; desactivalo para no verlo.",
+      "default": true
+    },
+    "git_commit_model": {
+      "type": "string",
+      "title": "Commit: modelo de «Generar con Claude»",
+      "description": "Un alias (haiku, sonnet, opus) o un id de modelo.",
+      "default": "haiku"
+    },
+    "git_commit_via": {
+      "type": "string",
+      "title": "Commit: cómo se ejecuta",
+      "description": "auto: directo si el repositorio no tiene hooks propios, y por la herramienta Bash (con sus permisos y los hooks pre-commit/commit-msg) si los tiene; bash o direct lo fijan.",
+      "options": [
+        "auto",
+        "bash",
+        "direct"
+      ],
+      "default": "auto"
     }
   }
 }

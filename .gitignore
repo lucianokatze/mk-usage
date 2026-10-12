@@ -1,0 +1,10 @@
+# Claude Code escribe acá los tipos de su versión cada vez que carga el mod:
+# se regeneran solos, no van al repo.
+.claude-plugin/types/
+
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

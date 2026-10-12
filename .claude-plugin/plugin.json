@@ -1,0 +1,88 @@
+{
+  "name": "mk-usage",
+  "displayName": "mk-usage",
+  "version": "0.3.0",
+  "description": "Límites del plan de Claude (sesión 5h, semana) y renovación al final de la línea bajo el prompt, con estimación al reinicio. Configurable: idioma, ubicación, umbrales, facturación. Sin filas extra ni tokens.",
+  "author": {
+    "name": "Luciano (markcodigital)"
+  },
+  "license": "MIT",
+  "keywords": [
+    "usage",
+    "rate-limits",
+    "quota",
+    "mod"
+  ],
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "placement": {
+      "type": "string",
+      "title": "Ubicación (placement)",
+      "description": "Dónde se muestra: footer, al final de la línea bajo el prompt (sin fila propia, en gris); band, una fila propia sobre el prompt (con colores); hidden, solo el detalle con /mk-usage. /mk-usage <ubicación> lo cambia al momento.",
+      "options": [
+        "footer",
+        "band",
+        "hidden"
+      ],
+      "default": "footer"
+    },
+    "language": {
+      "type": "string",
+      "title": "Idioma (language)",
+      "description": "auto sigue el idioma del sistema (LANG); es o en lo fijan.",
+      "options": [
+        "auto",
+        "es",
+        "en"
+      ],
+      "default": "auto"
+    },
+    "time_format": {
+      "type": "string",
+      "title": "Formato de hora (time format)",
+      "description": "24h (15:00) o 12h (3:00pm).",
+      "options": [
+        "24h",
+        "12h"
+      ],
+      "default": "24h"
+    },
+    "renewal_date": {
+      "type": "string",
+      "title": "Próxima renovación (renewal date)",
+      "description": "La fecha de tu próxima renovación tal como la muestra claude.ai (AAAA-MM-DD o DD/MM/AAAA); se repite según el ciclo de facturación. Vacía: se estima desde la cuenta y se marca con ≈ (nunca en planes Team o Enterprise, que paga la organización)."
+    },
+    "billing_period": {
+      "type": "string",
+      "title": "Ciclo de facturación (billing period)",
+      "description": "monthly o yearly: cada cuánto se repite la renovación.",
+      "options": [
+        "monthly",
+        "yearly"
+      ],
+      "default": "monthly"
+    },
+    "show_renewal": {
+      "type": "boolean",
+      "title": "Mostrar la renovación (show renewal)",
+      "description": "Desactivalo si no pagás vos la suscripción o no te interesa verla.",
+      "default": true
+    },
+    "warn_percent": {
+      "type": "number",
+      "title": "Aviso: vas justo (warn %)",
+      "description": "Una ventana que llega a este % al reiniciarse, o ya lo superó, se marca como justa.",
+      "min": 1,
+      "max": 100,
+      "default": 85
+    },
+    "critical_percent": {
+      "type": "number",
+      "title": "Aviso: crítico (critical %)",
+      "description": "Una ventana que supera este %, o que se agota antes de reiniciarse, se marca como crítica.",
+      "min": 1,
+      "max": 100,
+      "default": 95
+    }
+  }
+}

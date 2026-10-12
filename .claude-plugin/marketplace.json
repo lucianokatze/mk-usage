@@ -1,0 +1,12 @@
+{
+  "name": "mk-usage",
+  "owner": { "name": "Luciano (markcodigital)" },
+  "metadata": { "description": "mk-usage, un mod de Claude Code: los límites del plan bajo el prompt." },
+  "plugins": [
+    {
+      "name": "mk-usage",
+      "source": "./",
+      "description": "Límites del plan de Claude bajo el prompt (sesión 5h, semana, renovación) con estimación al reinicio. Configurable. Sin filas extra ni tokens."
+    }
+  ]
+}
